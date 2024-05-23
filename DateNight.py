@@ -1,5 +1,6 @@
 import gspread
 import pandas as pd
+import re
 from oauth2client.service_account import ServiceAccountCredentials
 
 # define the scope
@@ -23,5 +24,20 @@ records_data = sheet_instance.get_all_records()
 # View the data
 records_df = pd.DataFrame.from_dict(records_data)
 
-# View the top records
-records_df.head()
+# View the values stored in the columns headers
+# print(records_df.columns.values)
+
+# View information from only certain columns
+selection = records_df[["Category", "Place", "Completed", "Price"]]
+
+# Change values found in "Price" column into numbers
+noNumbers = selection['Price']
+noNumbers.replace(to_replace='[^0-9]+', value='', inplace=True, regex=True)
+selection['Price'] = noNumbers
+
+# Filter out "Y" completed options
+print(selection)
+
+# Return the cheapest price places
+
+# print(selection)
